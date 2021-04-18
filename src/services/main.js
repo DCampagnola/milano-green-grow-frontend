@@ -9,7 +9,7 @@
  * @returns {Promise<Stats>}
  */
 export async function fetchStats() {
-    return (await fetch('http://localhost:8080/stats', {
+    return (await fetch(process.env.REACT_APP_BASE_API + 'stats', {
     })).json();
 }
 
@@ -35,7 +35,7 @@ export async function fetchStats() {
  * @returns {Promise<TownHalLStats[]>}
  */
 export async function fetchTownHall() {
-    return (await fetch('http://localhost:8080/city-hall-stats', {
+    return (await fetch(process.env.REACT_APP_BASE_API + 'city-hall-stats', {
     })).json();
 }
 
@@ -44,6 +44,6 @@ export async function fetchTownHall() {
  * @returns {Promise<TownHalLStatsHistory[]>}
  */
 export async function fetchTownHallHistory(townHall) {
-    return (await fetch('http://localhost:8080/history' + (townHall ? '?townHall=' + townHall : ''), {
+    return (await fetch(process.env.REACT_APP_BASE_API + 'history' + (townHall ? '?townHall=' + townHall : ''), {
     })).json();
 }
