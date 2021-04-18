@@ -1,21 +1,21 @@
 import React, { Component } from "react";
 import { fetchTownHallHistory } from "../services/main";
-import { Chart } from 'react-google-charts'
+import { Chart } from "react-google-charts";
 
 export class History extends Component {
   state = {
-    selectedTownHall: 1,
+    selectedTownHall: null,
     data: [],
     selectedOption: "nStations",
     selectedOptionName: "Numero di torrette"
-  }
+  };
 
   componentDidMount() {
     this.refreshData(this.state.selectedTownHall);
   }
 
   async refreshData(townHall) {
-    const response  =await fetchTownHallHistory(townHall);
+    const response = await fetchTownHallHistory(townHall);
     this.setState({
       data: response
     });
@@ -24,22 +24,27 @@ export class History extends Component {
   render() {
 
     const options =
-    {
+      {
+        animation: {
+          duration: 1000,
+          easing: "out",
+          startup: true
+        },
         hAxis: {
-      title: "Data",
-    },
-      vAxis: { title: this.state.selectedOptionName },
-      legend: "none"
-    }
-    const data = this.state.data.map(value => [new Date(value.createdAt).toDateString(), value[this.state.selectedOption]])
-    console.log("Rendering", this.state.selectedOptionName, this.state.selectedTownHall, this.state.selectedOption)
+          title: "Data"
+        },
+        vAxis: { title: this.state.selectedOptionName },
+        legend: "none"
+      };
+    const data = this.state.data.map(value => [new Date(value.createdAt).toLocaleDateString(), value[this.state.selectedOption]]);
+    console.log("Rendering", this.state.selectedOptionName, this.state.selectedTownHall, this.state.selectedOption);
     console.log("data", data);
     return (
       <div className="container">
         <h3 className="headline-3 text-center">Andamento nel tempo</h3>
         <p className="subtitle-2 text-center">Scopri come nel tempo è cambiato l'impegno per una città più green</p>
         <select className="form-control" value={this.state.selectedTownHall} onChange={this.changeTownHall.bind(this)}>
-          <option value={''}>Tutti i municipi</option>
+          <option value={""}>Tutti i municipi</option>
           <option value={1}>Municipio 1</option>
           <option value={2}>Municipio 2</option>
           <option value={3}>Municipio 3</option>
@@ -50,12 +55,14 @@ export class History extends Component {
           <option value={8}>Municipio 8</option>
           <option value={9}>Municipio 9</option>
         </select>
-        <select className="form-control" value={this.state.selectedOption} onChange={this.changeSelectedOption.bind(this)}>
-          <option value={"nStations"}>Numero di torrette</option>
-          <option value={"avgDistanceFromStation"}>Media distanza da torretta</option>
-          <option value={"maxDistanceFromStation"}>Massima distanza da torretta</option>
+        <select className="form-control" value={this.state.selectedOption}
+                onChange={this.changeSelectedOption.bind(this)}>
+          <option value={"nStations"}>Numero di colonnine</option>
+          <option value={"avgDistanceFromStation"}>Media distanza da colonnina</option>
+          <option value={"maxDistanceFromStation"}>Massima distanza da colonnina</option>
         </select>
         <Chart
+          loader={<div>Il grafico sta caricando</div>}
           chartType="LineChart"
           data={[["Data", this.state.selectedOptionName], ...data]}
           width="100%"
@@ -64,16 +71,20 @@ export class History extends Component {
           legendToggle
         />
       </div>
-    )
+    );
   }
 
   changeTownHall(event) {
-    console.log("target selected", event, event.target.value || null)
-    this.setState({selectedTownHall: event.target.value || null});
+    console.log("target selected", event, event.target.value || null);
+    this.setState({ selectedTownHall: event.target.value || null });
     this.refreshData(event.target.value || null);
   }
+
   changeSelectedOption(event) {
-    console.log(event)
-    this.setState({selectedOption: event.target.value, selectedOptionName: event.target.options[event.target.selectedIndex].text});
+    console.log(event);
+    this.setState({
+      selectedOption: event.target.value,
+      selectedOptionName: event.target.options[event.target.selectedIndex].text
+    });
   }
 }

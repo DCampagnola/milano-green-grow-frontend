@@ -30,7 +30,6 @@ export default class OverviewStations extends Component {
                     percorrere {this.props.avgDistanceFromStation} km per raggiungere una
                     stazione di ricarica.
                 </p>
-                <p className="caption">Clicca su un municipio per sapere le statistiche per quel municipio</p>
 
                 <div className="row">
                     <div className="col-12 col-md-6">
