@@ -3,6 +3,7 @@ import Header from './layout/Header'
 import {Component, useEffect, useState} from 'react';
 import OverviewStations from "./milan-map/OverviewStations";
 import {fetchStats, fetchTownHall} from "./services/main"
+import { History } from "./history/History";
 
 class App extends Component {
     componentDidMount() {
@@ -19,7 +20,7 @@ class App extends Component {
                 townHalls: info,
                 doneTownHall: true
             })
-        })
+        });
     }
     state= {
         nStations: 0,
@@ -43,6 +44,7 @@ class App extends Component {
                         ) :
                         <p>Loading</p>
                 }
+                <History />
             </>
         );
     }
