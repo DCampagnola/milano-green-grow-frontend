@@ -2,8 +2,9 @@ import './App.css';
 import Header from './layout/Header'
 import {Component, useEffect, useState} from 'react';
 import OverviewStations from "./milan-map/OverviewStations";
-import {fetchStats, fetchTownHall} from "./services/main"
+import { fetchProviderStats, fetchStats, fetchTownHall } from "./services/main";
 import { History } from "./history/History";
+import { ProviderStats } from "./providers/ProviderStats";
 
 class App extends Component {
     componentDidMount() {
@@ -21,12 +22,19 @@ class App extends Component {
                 doneTownHall: true
             })
         });
+        fetchProviderStats().then((info) => {
+            console.log(info)
+            this.setState({
+                providerStats: info,
+            })
+        });
     }
     state= {
         nStations: 0,
         maxDistanceFromStation: 20,
         avgDistanceFromStation: 40,
         townHalls: [],
+        providerStats: [],
         doneStats: false,
         doneTownHall: false
     }
@@ -45,6 +53,7 @@ class App extends Component {
                         <p>Loading</p>
                 }
                 <History />
+                <ProviderStats providerStats={this.state.providerStats}/>
             </>
         );
     }
